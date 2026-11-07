@@ -8,69 +8,93 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
 <style>
-/* Une seule fenêtre en arc, comme dans l'app : son ciel dit l'état (nuit calme = tout va bien). */
+/* Style du site muzzlimin.com, version F (planches `SiteF-*`) : nuit, rouge, étoiles, halo.
+   La fenêtre en arc de l'app reste : son ciel dit l'état, le halo prend la couleur de l'état. */
 :root {
-  --bg: #F5F2EC; --card: #FFFFFF; --soft: #EFEBE3; --line: #E2DCD0; --ink: #1C1915; --sub: #6E665A;
-  --acc: #D92645; --amber: #B8741F; --green: #1F7A4D; --blue: #3D6FB6;
-  --night1: #14203A; --night2: #2A3C63; --moon: #F2E6C8;
-  --ui: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --bg: #0C0B10; --card: #17151C; --line: rgba(255,255,255,.10); --line2: rgba(255,255,255,.18);
+  --ink: #F5F1EA; --soft-ink: #D8D2C8; --sub: #A8A095; --mute: #6F675E;
+  --acc: #D92645; --red-text: #FF9098; --amber: #E8A24A; --green: #5CC98E; --blue: #7EA6E6;
+  --night1: #14203A; --night2: #2A3C63; --moon: #F2E6C8; --glow: rgba(217,38,69,.22);
+  --ui: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   --display: "Newsreader", Georgia, "Times New Roman", serif;
-  color-scheme: light;
+  --ease: cubic-bezier(.2,.9,.3,1);
+  color-scheme: dark;
 }
-@media (prefers-color-scheme: dark) { :root { --bg: #12100E; --card: #1E1B17; --soft: #29251F; --line: #3A342C; --ink: #F3ECE0; --sub: #B5AB98; color-scheme: dark } }
 * { box-sizing: border-box }
 [hidden] { display: none !important }
-html, body { margin: 0 }
-body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--ui); padding-top: env(safe-area-inset-top, 0px);
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
-main { max-width: 620px; margin: 0 auto; padding-block: 48px 56px; display: grid; gap: 22px }
-.top { display: flex; justify-content: space-between; align-items: center; gap: 12px }
-.brand { font: 500 20px/1 var(--display) }
-.lang { border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 14px; padding: 6px 12px; font: 600 13px var(--ui); cursor: pointer }
-.hero { background: var(--card); border: 1px solid var(--line); border-radius: 28px; padding: 30px 24px; display: grid; justify-items: center; text-align: center; gap: 10px }
-.win { position: relative; width: 92px; height: 128px; border-radius: 46px 46px 10px 10px; background: linear-gradient(180deg, var(--night1), var(--night2)); overflow: hidden }
-.win .moon { position: absolute; left: 50px; top: 20px; width: 22px; height: 22px; border-radius: 11px; box-shadow: -6px 3px 0 0 var(--moon) }
-.win .st { position: absolute; width: 3px; height: 3px; border-radius: 2px; background: var(--moon); animation: tw 2.6s ease-in-out infinite }
-@keyframes tw { 0%, 100% { opacity: .25 } 50% { opacity: 1 } }
-.badge { position: absolute; left: 50%; top: 96px; margin-left: 14px; width: 46px; height: 46px; border-radius: 23px; background: var(--card); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 18px rgba(0,0,0,.12) }
-.art { position: relative; width: 140px; height: 150px; display: flex; justify-content: center }
-h1 { font: 500 32px/1.15 var(--display); margin: 6px 0 0; text-wrap: balance }
-.msg { color: var(--sub); max-width: 46ch; margin: 0 }
-.pill { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; padding: 6px 14px; border-radius: 17px; text-wrap: balance; background: var(--soft); font-weight: 600; font-size: 14px }
-.dot { width: 9px; height: 9px; border-radius: 5px; background: currentColor }
-.list { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 6px 18px }
-.row { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line) }
+html, body { margin: 0; background: var(--bg) }
+body { color: var(--ink); font: 16px/1.55 var(--ui); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  padding-top: env(safe-area-inset-top, 0px); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.sky { position: fixed; inset: 0; pointer-events: none; z-index: 0 }
+.sky .st { position: absolute; border-radius: 50%; background: #F3ECE0; animation: twk 3s ease-in-out infinite }
+.sky .halo { position: absolute; left: 50%; top: -120px; width: 760px; height: 760px; margin-left: -380px; border-radius: 50%; background: radial-gradient(circle, var(--glow), rgba(12,11,16,0) 62%); animation: brth 4s ease-in-out infinite; transition: background .6s }
+main { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; padding-block: 20px 48px; display: grid; gap: 18px }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit }
+.logo { width: 34px; height: 34px; border-radius: 17px 17px 5px 5px; background: #fff; position: relative; overflow: hidden; flex: none }
+.logo::after { content: ""; position: absolute; left: 15px; top: 8px; width: 11px; height: 11px; border-radius: 6px; box-shadow: -4px 2px 0 0 var(--acc) }
+.word { font-weight: 700; font-size: 14px; letter-spacing: .14em }
+.langs { display: inline-flex; gap: 2px; padding: 3px; border-radius: 20px; border: 1px solid var(--line2) }
+.langs button { min-height: 38px; min-width: 44px; padding: 0 12px; border-radius: 17px; border: 0; cursor: pointer; background: transparent; color: var(--sub); font: 600 13.5px var(--ui); transition: background .25s, color .25s }
+.langs button[aria-pressed=true] { background: var(--ink); color: #12100E }
+.hero { display: grid; justify-items: center; text-align: center; gap: 12px; padding: 34px 0 8px }
+.kick { font-size: 12px; font-weight: 700; letter-spacing: .16em; color: var(--acc); text-transform: uppercase }
+.art { position: relative; width: 150px; height: 160px; display: flex; justify-content: center; animation: pop .7s var(--ease) both }
+.win { position: relative; width: 104px; height: 144px; border-radius: 52px 52px 12px 12px; background: linear-gradient(180deg, var(--night1), var(--night2)); overflow: hidden; box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 0 60px var(--glow) }
+.win .moon { position: absolute; left: 56px; top: 22px; width: 24px; height: 24px; border-radius: 12px; box-shadow: -6px 3px 0 0 var(--moon) }
+.win .st { position: absolute; width: 3px; height: 3px; border-radius: 2px; background: var(--moon); animation: twk 2.6s ease-in-out infinite }
+.badge { position: absolute; left: 50%; top: 106px; margin-left: 18px; width: 50px; height: 50px; border-radius: 25px; background: var(--card); border: 1px solid var(--line2); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(0,0,0,.4) }
+h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.01em; margin: 4px 0 0; text-wrap: balance }
+.msg { color: var(--soft-ink); max-width: 30em; margin: 0; font-size: 16.5px; line-height: 1.5 }
+.pill { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 6px 16px; border-radius: 18px; text-wrap: balance; background: rgba(255,255,255,.06); border: 1px solid var(--line2); font-weight: 600; font-size: 14px }
+.dot { width: 9px; height: 9px; border-radius: 5px; background: currentColor; flex: none }
+.pill .dot { animation: ping 2.2s ease-out infinite }
+.list { background: var(--card); border: 1px solid var(--line); border-radius: 28px; padding: 8px 22px; transition: border-color .25s, box-shadow .25s }
+.list:hover { border-color: rgba(217,38,69,.6); box-shadow: 0 0 40px rgba(217,38,69,.14) }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line) }
 .row:first-child { border-top: 0 }
-.row .s { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; font-size: 14px; white-space: nowrap }
-.note { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 16px 18px }
-.note b { display: block }
-.foot { color: var(--sub); font-size: 13.5px; text-align: center; line-height: 1.6 }
-.foot a { color: inherit }
-@media (prefers-reduced-motion: reduce) { * { animation: none !important } }
+.row .s { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; white-space: nowrap }
+.note { background: rgba(217,38,69,.12); border: 1px solid rgba(217,38,69,.4); border-radius: 22px; padding: 18px 20px }
+.note b { display: block; font-weight: 600 }
+.foot { margin-top: 30px; padding-top: 26px; border-top: 1px solid var(--line); color: var(--sub); font-size: 14px; display: grid; gap: 8px }
+.foot a { color: var(--red-text); font-weight: 600 }
+.rise { animation: rs .8s var(--ease) both }
+.d1 { animation-delay: .08s } .d2 { animation-delay: .16s } .d3 { animation-delay: .24s }
+@keyframes rs { from { opacity: 0; transform: translateY(22px) } to { opacity: 1; transform: none } }
+@keyframes pop { 0% { transform: scale(.7); opacity: 0 } 70% { transform: scale(1.06) } 100% { transform: scale(1); opacity: 1 } }
+@keyframes twk { 0%, 100% { opacity: .2 } 50% { opacity: 1 } }
+@keyframes brth { 0%, 100% { opacity: .55 } 50% { opacity: .95 } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 currentColor } 70%, 100% { box-shadow: 0 0 0 7px transparent } }
+:focus-visible { outline: 2px solid var(--acc); outline-offset: 3px }
+@media (max-width: 420px) { h1 { font-size: 38px } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important } }
 </style>
 </head>
 <body>
+<div class="sky" aria-hidden="true"><div class="halo"></div><div id="stars"></div></div>
 <main>
-  <div class="top"><span class="brand">Muzzlimin</span><button class="lang" id="lang" type="button">English</button></div>
+  <div class="top rise"><a class="brand" href="https://muzzlimin.com" aria-label="Muzzlimin"><span class="logo" aria-hidden="true"></span><span class="word">MUZZLIMIN</span></a>
+    <div class="langs" role="group" aria-label="Langue / Language"><button type="button" data-lang="fr" aria-pressed="true">FR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div></div>
   <section class="hero" aria-live="polite">
+    <div class="kick rise" id="kick"></div>
     <div class="art" aria-hidden="true"><div class="win"><span class="moon"></span><span class="st" style="left:18px;top:30px"></span><span class="st" style="left:62px;top:56px;animation-delay:.8s"></span><span class="st" style="left:28px;top:74px;animation-delay:1.6s"></span></div><span class="badge" id="badge"></span></div>
-    <span class="pill" id="pill"><span class="dot"></span><span id="pillT"></span></span>
-    <h1 id="title"></h1>
-    <p class="msg" id="msg"></p>
+    <span class="pill rise d1" id="pill"><span class="dot"></span><span id="pillT"></span></span>
+    <h1 class="rise d1" id="title"></h1>
+    <p class="msg rise d2" id="msg"></p>
   </section>
-  <section class="list" aria-label="Services" id="list"></section>
+  <section class="list rise d3" aria-label="Services" id="list"></section>
   <section class="note" id="notice" hidden><b id="nT"></b><span id="nM" style="color: var(--sub)"></span></section>
-  <p class="foot"><span id="upd"></span><br><span id="help"></span> <a href="mailto:maintenance@muzzlimin.com">maintenance@muzzlimin.com</a></p>
+  <footer class="foot"><span id="upd"></span><span><span id="help"></span> <a href="mailto:maintenance@muzzlimin.com">maintenance@muzzlimin.com</a></span><span style="color: var(--mute)">© 2026 Muzzlimin</span></footer>
 </main>
 <script>
 (() => {
   const T = {
-    fr: { other: 'English', ok: 'Tout fonctionne', okT: 'Muzzlimin fonctionne normalement', okM: 'Les leçons, la révision, le Coran, la synchronisation et les achats marchent.',
+    fr: { kick: 'État du service', other: 'English', ok: 'Tout fonctionne', okT: 'Muzzlimin fonctionne normalement', okM: 'Les leçons, la révision, le Coran, la synchronisation et les achats marchent.',
       now: 'Maintenance en cours', nowT: 'Petite pause de maintenance', soon: 'Maintenance prévue', soonT: 'Une maintenance est prévue', block: 'App indisponible', blockT: 'Muzzlimin revient très vite',
       until: 'fin prévue vers', at: 'le', from: 'à partir de', svc: [['learn', 'Leçons, révision, Coran'], ['sync', 'Synchronisation'], ['buy', 'Achats et abonnements'], ['sign', 'Connexion et comptes']],
       up: 'Disponible', paused: 'En pause', down: 'Indisponible', offline: 'Hors ligne aussi', checked: 'Vérifié à', unknown: 'État inconnu', unknownT: 'Impossible de lire l’état', unknownM: 'Réessaie dans un instant.', help: 'Une question ?',
       def: 'Tout ce qui est déjà sur ton téléphone reste disponible.' },
-    en: { other: 'Français', ok: 'All systems normal', okT: 'Muzzlimin is working normally', okM: 'Lessons, reviews, the Quran, sync and purchases all work.',
+    en: { kick: 'Service status', other: 'Français', ok: 'All systems normal', okT: 'Muzzlimin is working normally', okM: 'Lessons, reviews, the Quran, sync and purchases all work.',
       now: 'Maintenance in progress', nowT: 'A short maintenance break', soon: 'Maintenance scheduled', soonT: 'Maintenance is scheduled', block: 'App unavailable', blockT: 'Muzzlimin will be right back',
       until: 'expected to end around', at: 'on', from: 'from', svc: [['learn', 'Lessons, reviews, Quran'], ['sync', 'Sync'], ['buy', 'Purchases and subscriptions'], ['sign', 'Sign-in and accounts']],
       up: 'Available', paused: 'Paused', down: 'Unavailable', offline: 'Works offline too', checked: 'Checked at', unknown: 'Status unknown', unknownT: 'We couldn’t read the status', unknownM: 'Try again in a moment.', help: 'A question?',
@@ -82,11 +106,11 @@ h1 { font: 500 32px/1.15 var(--display); margin: 6px 0 0; text-wrap: balance }
   const fmt = (iso, withDay) => { const d = new Date(iso); if (isNaN(d)) return ''; const loc = lang === 'fr' ? 'fr-FR' : 'en-GB'; const t = d.toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit' }); return withDay && d.toDateString() !== new Date().toDateString() ? d.toLocaleDateString(loc, { weekday: 'long', day: 'numeric', month: 'long' }) + ', ' + t : t };
   const pick = o => o ? ((o[lang] || '').trim() || (o.en || '').trim() || (o.fr || '').trim()) : '';
   const icon = {
-    ok: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
-    tool: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B8741F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>',
-    cal: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3D6FB6" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
-    clock: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D92645" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>',
-    q: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6E665A" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 16h.01M10 10a2 2 0 1 1 3 1.7c-.7.4-1 .9-1 1.6"/></svg>' };
+    ok: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5CC98E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
+    tool: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8A24A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>',
+    cal: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7EA6E6" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+    clock: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF9098" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>',
+    q: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8A095" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 16h.01M10 10a2 2 0 1 1 3 1.7c-.7.4-1 .9-1 1.6"/></svg>' };
 
   function state() {
     if (failed || !data) return 'unknown';
@@ -96,19 +120,20 @@ h1 { font: 500 32px/1.15 var(--display); margin: 6px 0 0; text-wrap: balance }
     return m.blocking ? 'block' : 'now';
   }
   function render() {
-    const L = T[lang]; document.documentElement.lang = lang; $('lang').textContent = L.other;
+    const L = T[lang]; document.documentElement.lang = lang; $('kick').textContent = L.kick;
+    for (const b of document.querySelectorAll('[data-lang]')) b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
     const s = state(), m = (data && data.maintenance) || {};
     const conf = { ok: ['var(--green)', L.ok, L.okT, L.okM, icon.ok], now: ['var(--amber)', L.now, L.nowT, pick(m.message) || L.def, icon.tool],
-      soon: ['var(--blue)', L.soon, L.soonT, pick(m.message) || L.def, icon.cal], block: ['var(--acc)', L.block, L.blockT, pick(m.message) || L.def, icon.clock],
+      soon: ['var(--blue)', L.soon, L.soonT, pick(m.message) || L.def, icon.cal], block: ['var(--red-text)', L.block, L.blockT, pick(m.message) || L.def, icon.clock],
       unknown: ['var(--sub)', L.unknown, L.unknownT, L.unknownM, icon.q] }[s];
-    $('pill').style.color = conf[0]; $('pillT').textContent = conf[1]; $('title').textContent = conf[2]; $('msg').textContent = conf[3]; $('badge').innerHTML = conf[4];
+    $('pill').style.color = conf[0]; document.documentElement.style.setProperty('--glow', { ok: 'rgba(92,201,142,.16)', now: 'rgba(232,162,74,.20)', soon: 'rgba(126,166,230,.18)', block: 'rgba(217,38,69,.24)', unknown: 'rgba(168,160,149,.12)' }[s]); $('pillT').textContent = conf[1]; $('title').textContent = conf[2]; $('msg').textContent = conf[3]; $('badge').innerHTML = conf[4];
     if (s === 'now' && m.until) $('pillT').textContent = L.now + ' · ' + L.until + ' ' + fmt(m.until, true);
     if (s === 'block' && m.until) $('pillT').textContent = L.block + ' · ' + L.until + ' ' + fmt(m.until, true);
     if (s === 'soon') $('pillT').textContent = L.soon + ' · ' + fmt(m.from, true) + (m.until ? ' – ' + fmt(m.until) : '');
     const pause = m.pause || { sync: true, purchases: true, sign_in: true };
     const status = k => {
       if (s === 'unknown') return ['var(--sub)', '—'];
-      if (s === 'block') return ['var(--acc)', L.down];
+      if (s === 'block') return ['var(--red-text)', L.down];
       if (s === 'now') { const p = { sync: pause.sync !== false, buy: pause.purchases !== false, sign: pause.sign_in !== false }[k]; if (p) return ['var(--amber)', L.paused]; if (k === 'learn') return ['var(--green)', L.offline] }
       return ['var(--green)', L.up];
     };
@@ -123,7 +148,8 @@ h1 { font: 500 32px/1.15 var(--display); margin: 6px 0 0; text-wrap: balance }
     try { const r = await fetch('status.json?t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' }); if (!r.ok) throw 0; data = await r.json(); failed = false } catch { failed = !data }
     render();
   }
-  $('lang').onclick = () => { lang = lang === 'fr' ? 'en' : 'fr'; render() };
+  for (const b of document.querySelectorAll('[data-lang]')) b.onclick = () => { lang = b.dataset.lang; render() };
+  const sky = $('stars'); for (let i = 0; i < 70; i++) { const st = document.createElement('span'); const z = 1 + Math.floor(Math.random() * 3); st.className = 'st'; st.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 100}%;width:${z}px;height:${z}px;animation-delay:${(Math.random() * 3).toFixed(2)}s`; sky.appendChild(st) }
   // Aperçu dans la console : la page affiche l'état que la console lui envoie, sans rien lire en ligne.
   const apercu = new URLSearchParams(location.search).has('apercu') && window.parent !== window;
   if (apercu) {
