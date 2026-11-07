@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="240" viewBox="0 0 960 240">
+  <defs>
+    <radialGradient id="g" cx="78%" cy="20%" r="70%">
+      <stop offset="0" stop-color="#3a1018"/>
+      <stop offset="1" stop-color="#121212"/>
+    </radialGradient>
+    <radialGradient id="o" cx="35%" cy="30%" r="70%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="cres"><rect width="960" height="240" fill="#fff"/><circle cx="424" cy="98" r="15" fill="#000"/></mask>
+  </defs>
+  <rect width="960" height="240" rx="24" fill="url(#g)"/>
+  <circle cx="820" cy="60" r="34" fill="url(#o)" opacity=".35"/>
+  <circle cx="880" cy="170" r="18" fill="url(#o)" opacity=".25"/>
+  <circle cx="110" cy="190" r="22" fill="url(#o)" opacity=".18"/>
+  <g transform="translate(-95 0)">
+  <path d="M370 150 V96 a42 42 0 0 1 84 0 V150 a8 8 0 0 1 -8 8 H378 a8 8 0 0 1 -8 -8 Z" fill="#fff"/>
+  <circle cx="416" cy="104" r="17" fill="#D92645" mask="url(#cres)"/>
+  <text x="480" y="122" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="40" font-weight="700" letter-spacing="7" fill="#fff">MUZZLIMIN</text>
+  <text x="482" y="156" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" letter-spacing="1" fill="#D8D2C8">Statut de l'application</text>
+  </g>
+</svg>

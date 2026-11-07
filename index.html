@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Statut de Muzzlimin</title>
+<meta name="description" content="Muzzlimin fonctionne-t-il en ce moment ? Maintenance, incidents et annonces.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+/* Une seule fenêtre en arc, comme dans l'app : son ciel dit l'état (nuit calme = tout va bien). */
+:root {
+  --bg: #F5F2EC; --card: #FFFFFF; --soft: #EFEBE3; --line: #E2DCD0; --ink: #1C1915; --sub: #6E665A;
+  --acc: #D92645; --amber: #B8741F; --green: #1F7A4D; --blue: #3D6FB6;
+  --night1: #14203A; --night2: #2A3C63; --moon: #F2E6C8;
+  --ui: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root { --bg: #12100E; --card: #1E1B17; --soft: #29251F; --line: #3A342C; --ink: #F3ECE0; --sub: #B5AB98; color-scheme: dark } }
+* { box-sizing: border-box }
+[hidden] { display: none !important }
+html, body { margin: 0 }
+body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--ui); padding-top: env(safe-area-inset-top, 0px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+main { max-width: 620px; margin: 0 auto; padding-block: 48px 56px; display: grid; gap: 22px }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px }
+.brand { font: 500 20px/1 var(--display) }
+.lang { border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 14px; padding: 6px 12px; font: 600 13px var(--ui); cursor: pointer }
+.hero { background: var(--card); border: 1px solid var(--line); border-radius: 28px; padding: 30px 24px; display: grid; justify-items: center; text-align: center; gap: 10px }
+.win { position: relative; width: 92px; height: 128px; border-radius: 46px 46px 10px 10px; background: linear-gradient(180deg, var(--night1), var(--night2)); overflow: hidden }
+.win .moon { position: absolute; left: 50px; top: 20px; width: 22px; height: 22px; border-radius: 11px; box-shadow: -6px 3px 0 0 var(--moon) }
+.win .st { position: absolute; width: 3px; height: 3px; border-radius: 2px; background: var(--moon); animation: tw 2.6s ease-in-out infinite }
+@keyframes tw { 0%, 100% { opacity: .25 } 50% { opacity: 1 } }
+.badge { position: absolute; left: 50%; top: 96px; margin-left: 14px; width: 46px; height: 46px; border-radius: 23px; background: var(--card); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 18px rgba(0,0,0,.12) }
+.art { position: relative; width: 140px; height: 150px; display: flex; justify-content: center }
+h1 { font: 500 32px/1.15 var(--display); margin: 6px 0 0; text-wrap: balance }
+.msg { color: var(--sub); max-width: 46ch; margin: 0 }
+.pill { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; padding: 6px 14px; border-radius: 17px; text-wrap: balance; background: var(--soft); font-weight: 600; font-size: 14px }
+.dot { width: 9px; height: 9px; border-radius: 5px; background: currentColor }
+.list { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 6px 18px }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line) }
+.row:first-child { border-top: 0 }
+.row .s { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; font-size: 14px; white-space: nowrap }
+.note { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 16px 18px }
+.note b { display: block }
+.foot { color: var(--sub); font-size: 13.5px; text-align: center; line-height: 1.6 }
+.foot a { color: inherit }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important } }
+</style>
+</head>
+<body>
+<main>
+  <div class="top"><span class="brand">Muzzlimin</span><button class="lang" id="lang" type="button">English</button></div>
+  <section class="hero" aria-live="polite">
+    <div class="art" aria-hidden="true"><div class="win"><span class="moon"></span><span class="st" style="left:18px;top:30px"></span><span class="st" style="left:62px;top:56px;animation-delay:.8s"></span><span class="st" style="left:28px;top:74px;animation-delay:1.6s"></span></div><span class="badge" id="badge"></span></div>
+    <span class="pill" id="pill"><span class="dot"></span><span id="pillT"></span></span>
+    <h1 id="title"></h1>
+    <p class="msg" id="msg"></p>
+  </section>
+  <section class="list" aria-label="Services" id="list"></section>
+  <section class="note" id="notice" hidden><b id="nT"></b><span id="nM" style="color: var(--sub)"></span></section>
+  <p class="foot"><span id="upd"></span><br><span id="help"></span> <a href="mailto:maintenance@muzzlimin.com">maintenance@muzzlimin.com</a></p>
+</main>
+<script>
+(() => {
+  const T = {
+    fr: { other: 'English', ok: 'Tout fonctionne', okT: 'Muzzlimin fonctionne normalement', okM: 'Les leçons, la révision, le Coran, la synchronisation et les achats marchent.',
+      now: 'Maintenance en cours', nowT: 'Petite pause de maintenance', soon: 'Maintenance prévue', soonT: 'Une maintenance est prévue', block: 'App indisponible', blockT: 'Muzzlimin revient très vite',
+      until: 'fin prévue vers', at: 'le', from: 'à partir de', svc: [['learn', 'Leçons, révision, Coran'], ['sync', 'Synchronisation'], ['buy', 'Achats et abonnements'], ['sign', 'Connexion et comptes']],
+      up: 'Disponible', paused: 'En pause', down: 'Indisponible', offline: 'Hors ligne aussi', checked: 'Vérifié à', unknown: 'État inconnu', unknownT: 'Impossible de lire l’état', unknownM: 'Réessaie dans un instant.', help: 'Une question ?',
+      def: 'Tout ce qui est déjà sur ton téléphone reste disponible.' },
+    en: { other: 'Français', ok: 'All systems normal', okT: 'Muzzlimin is working normally', okM: 'Lessons, reviews, the Quran, sync and purchases all work.',
+      now: 'Maintenance in progress', nowT: 'A short maintenance break', soon: 'Maintenance scheduled', soonT: 'Maintenance is scheduled', block: 'App unavailable', blockT: 'Muzzlimin will be right back',
+      until: 'expected to end around', at: 'on', from: 'from', svc: [['learn', 'Lessons, reviews, Quran'], ['sync', 'Sync'], ['buy', 'Purchases and subscriptions'], ['sign', 'Sign-in and accounts']],
+      up: 'Available', paused: 'Paused', down: 'Unavailable', offline: 'Works offline too', checked: 'Checked at', unknown: 'Status unknown', unknownT: 'We couldn’t read the status', unknownM: 'Try again in a moment.', help: 'A question?',
+      def: 'Everything already on your phone stays available.' } };
+  let lang = (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : 'en';
+  try { const q = new URLSearchParams(location.search).get('lang'); if (q === 'fr' || q === 'en') lang = q } catch {}
+  let data = null, failed = false;
+  const $ = id => document.getElementById(id);
+  const fmt = (iso, withDay) => { const d = new Date(iso); if (isNaN(d)) return ''; const loc = lang === 'fr' ? 'fr-FR' : 'en-GB'; const t = d.toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit' }); return withDay && d.toDateString() !== new Date().toDateString() ? d.toLocaleDateString(loc, { weekday: 'long', day: 'numeric', month: 'long' }) + ', ' + t : t };
+  const pick = o => o ? ((o[lang] || '').trim() || (o.en || '').trim() || (o.fr || '').trim()) : '';
+  const icon = {
+    ok: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
+    tool: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B8741F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>',
+    cal: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3D6FB6" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+    clock: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D92645" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>',
+    q: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6E665A" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 16h.01M10 10a2 2 0 1 1 3 1.7c-.7.4-1 .9-1 1.6"/></svg>' };
+
+  function state() {
+    if (failed || !data) return 'unknown';
+    const m = data.maintenance || {}, now = Date.now();
+    if (!m.active || (m.until && new Date(m.until) <= now)) return 'ok';
+    if (m.from && new Date(m.from) > now) return 'soon';
+    return m.blocking ? 'block' : 'now';
+  }
+  function render() {
+    const L = T[lang]; document.documentElement.lang = lang; $('lang').textContent = L.other;
+    const s = state(), m = (data && data.maintenance) || {};
+    const conf = { ok: ['var(--green)', L.ok, L.okT, L.okM, icon.ok], now: ['var(--amber)', L.now, L.nowT, pick(m.message) || L.def, icon.tool],
+      soon: ['var(--blue)', L.soon, L.soonT, pick(m.message) || L.def, icon.cal], block: ['var(--acc)', L.block, L.blockT, pick(m.message) || L.def, icon.clock],
+      unknown: ['var(--sub)', L.unknown, L.unknownT, L.unknownM, icon.q] }[s];
+    $('pill').style.color = conf[0]; $('pillT').textContent = conf[1]; $('title').textContent = conf[2]; $('msg').textContent = conf[3]; $('badge').innerHTML = conf[4];
+    if (s === 'now' && m.until) $('pillT').textContent = L.now + ' · ' + L.until + ' ' + fmt(m.until, true);
+    if (s === 'block' && m.until) $('pillT').textContent = L.block + ' · ' + L.until + ' ' + fmt(m.until, true);
+    if (s === 'soon') $('pillT').textContent = L.soon + ' · ' + fmt(m.from, true) + (m.until ? ' – ' + fmt(m.until) : '');
+    const pause = m.pause || { sync: true, purchases: true, sign_in: true };
+    const status = k => {
+      if (s === 'unknown') return ['var(--sub)', '—'];
+      if (s === 'block') return ['var(--acc)', L.down];
+      if (s === 'now') { const p = { sync: pause.sync !== false, buy: pause.purchases !== false, sign: pause.sign_in !== false }[k]; if (p) return ['var(--amber)', L.paused]; if (k === 'learn') return ['var(--green)', L.offline] }
+      return ['var(--green)', L.up];
+    };
+    $('list').innerHTML = '';
+    for (const [k, name] of L.svc) { const [col, t] = status(k); const r = document.createElement('div'); r.className = 'row'; const a = document.createElement('span'); a.textContent = name; const b = document.createElement('span'); b.className = 's'; b.style.color = col; b.innerHTML = '<span class="dot"></span>'; b.append(t); r.append(a, b); $('list').append(r) }
+    const n = data && data.notice; const live = n && (!n.until || new Date(n.until) > Date.now()) && (pick(n.title) || pick(n.message));
+    $('notice').hidden = !live; if (live) { $('nT').textContent = pick(n.title); $('nM').textContent = pick(n.message) }
+    $('upd').textContent = L.checked + ' ' + fmt(new Date().toISOString());
+    $('help').textContent = L.help;
+  }
+  async function load() {
+    try { const r = await fetch('status.json?t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' }); if (!r.ok) throw 0; data = await r.json(); failed = false } catch { failed = !data }
+    render();
+  }
+  $('lang').onclick = () => { lang = lang === 'fr' ? 'en' : 'fr'; render() };
+  // Aperçu dans la console : la page affiche l'état que la console lui envoie, sans rien lire en ligne.
+  const apercu = new URLSearchParams(location.search).has('apercu') && window.parent !== window;
+  if (apercu) {
+    window.addEventListener('message', e => { if (e.source !== window.parent || !e.data || e.data.type !== 'mz-apercu') return; data = e.data.status; failed = false; if (e.data.lang === 'fr' || e.data.lang === 'en') lang = e.data.lang; render() });
+    render();
+  } else { render(); load(); setInterval(load, 60000) }
+})();
+</script>
+</body>
+</html>

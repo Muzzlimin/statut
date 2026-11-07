@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "updated_at": "2026-11-07T02:01:25Z",
+  "maintenance": {
+    "active": false,
+    "blocking": false
+  },
+  "min_version": {
+    "ios": "1.0.0",
+    "android": "1.0.0"
+  },
+  "recommended_version": {
+    "ios": "1.0.0",
+    "android": "1.0.0"
+  }
+}
