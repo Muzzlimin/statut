@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Statut de Muzzlimin</title>
 <meta name="description" content="Muzzlimin fonctionne-t-il en ce moment ? Maintenance, incidents et annonces.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
 <style>
@@ -31,8 +32,7 @@ body { color: var(--ink); font: 16px/1.55 var(--ui); -webkit-font-smoothing: ant
 main { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; padding-block: 20px 48px; display: grid; gap: 18px }
 .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit }
-.logo { width: 34px; height: 34px; border-radius: 17px 17px 5px 5px; background: #fff; position: relative; overflow: hidden; flex: none }
-.logo::after { content: ""; position: absolute; left: 15px; top: 8px; width: 11px; height: 11px; border-radius: 6px; box-shadow: -4px 2px 0 0 var(--acc) }
+.logo { width: 34px; height: 34px; border-radius: 9px; display: block; flex: none; box-shadow: 0 0 0 1px rgba(255,255,255,.16) }
 .word { font-weight: 700; font-size: 14px; letter-spacing: .14em }
 .langs { display: inline-flex; gap: 2px; padding: 3px; border-radius: 20px; border: 1px solid var(--line2) }
 .langs button { min-height: 38px; min-width: 44px; padding: 0 12px; border-radius: 17px; border: 0; cursor: pointer; background: transparent; color: var(--sub); font: 600 13.5px var(--ui); transition: background .25s, color .25s }
@@ -73,7 +73,7 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.01em; margin: 4px 0 0
 <body>
 <div class="sky" aria-hidden="true"><div class="halo"></div><div id="stars"></div></div>
 <main>
-  <div class="top rise"><a class="brand" href="https://muzzlimin.com" aria-label="Muzzlimin"><span class="logo" aria-hidden="true"></span><span class="word">MUZZLIMIN</span></a>
+  <div class="top rise"><a class="brand" href="https://muzzlimin.com" aria-label="Muzzlimin"><img class="logo" src="logo.svg" alt="" width="34" height="34"><span class="word">MUZZLIMIN</span></a>
     <div class="langs" role="group" aria-label="Langue / Language"><button type="button" data-lang="fr" aria-pressed="true">FR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div></div>
   <section class="hero" aria-live="polite">
     <div class="kick rise" id="kick"></div>
