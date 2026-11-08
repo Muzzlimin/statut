@@ -35,7 +35,7 @@ main { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; padding
 .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit }
 .logo { width: 34px; height: 34px; border-radius: 9px; display: block; flex: none; box-shadow: 0 0 0 1px rgba(255,255,255,.16) }
-.word { font-weight: 700; font-size: 14px; letter-spacing: .14em }
+.word { font-family: "Newsreader", Georgia, "Times New Roman", serif; font-weight: 500; font-size: 25px; line-height: 1; letter-spacing: -.005em }
 .langs { display: inline-flex; gap: 2px; padding: 3px; border-radius: 20px; border: 1px solid var(--line2) }
 .langs button { min-height: 38px; min-width: 44px; padding: 0 12px; border-radius: 17px; border: 0; cursor: pointer; background: transparent; color: var(--sub); font: 600 13.5px var(--ui); transition: background .25s, color .25s }
 .langs button[aria-pressed=true] { background: var(--ink); color: #12100E }
@@ -75,7 +75,7 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.01em; margin: 4px 0 0
 <body>
 <div class="sky" aria-hidden="true"><div class="halo"></div><div id="stars"></div></div>
 <main>
-  <div class="top rise"><a class="brand" href="https://muzzlimin.com" aria-label="Muzzlimin"><img class="logo" src="logo.svg" alt="" width="34" height="34"><span class="word">MUZZLIMIN</span></a>
+  <div class="top rise"><a class="brand" href="https://muzzlimin.com" aria-label="Muzzlimin"><img class="logo" src="logo.svg" alt="" width="34" height="34"><span class="word">Muzzlimin</span></a>
     <div class="langs" role="group" aria-label="Langue / Language"><button type="button" data-lang="fr" aria-pressed="true">FR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div></div>
   <section class="hero" aria-live="polite">
     <div class="kick rise" id="kick"></div>
