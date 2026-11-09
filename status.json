@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated_at": "2026-11-07T02:01:25Z",
+  "updated_at": "2026-11-09T02:23:27Z",
   "maintenance": {
     "active": false,
     "blocking": false
@@ -12,5 +12,15 @@
   "recommended_version": {
     "ios": "1.0.0",
     "android": "1.0.0"
+  },
+  "notice": {
+    "id": "2026-11-09-hello-bienvenue-sur-muzzlimin",
+    "until": "2026-11-10T02:23:00Z",
+    "title": {
+      "fr": "Hello bienvenue sur Muzzlimin"
+    },
+    "message": {
+      "fr": "Très content de t'accueillir"
+    }
   }
 }
