@@ -60,6 +60,20 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
 .note b { display: block; font-weight: 600 }
 .foot { margin-top: 30px; padding-top: 26px; border-top: 1px solid var(--line); color: var(--sub); font-size: 14px; display: grid; gap: 8px }
 .foot a { color: var(--red-text); font-weight: 600 }
+/* Bouton de lien et pages en carrousel (décision du 17/11/2026, règles de l'app §28). */
+.extra { display: grid; gap: 14px }
+.pages { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 2px }
+.pages::-webkit-scrollbar { display: none }
+.page { flex: 0 0 100%; scroll-snap-align: center; background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 16px; display: grid; gap: 8px; text-align: center }
+.page img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 16px; display: block }
+.page b { font: 500 22px/1.2 var(--display) }
+.page span { color: var(--sub) }
+.dots { display: flex; justify-content: center }
+.dots button { width: 34px; height: 44px; border: 0; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center }
+.dots button i { width: 8px; height: 8px; border-radius: 4px; background: var(--line2); transition: width .25s, background .25s }
+.dots button[aria-current=true] i { width: 22px; background: var(--acc) }
+.link { justify-self: center; display: inline-flex; align-items: center; gap: 8px; min-height: 50px; padding: 0 22px; border-radius: 25px; border: 1.5px solid var(--line2); color: var(--ink); text-decoration: none; font-weight: 700 }
+.link:hover { border-color: var(--acc) }
 .rise { animation: rs .8s var(--ease) both }
 .d1 { animation-delay: .08s } .d2 { animation-delay: .16s } .d3 { animation-delay: .24s }
 @keyframes rs { from { opacity: 0; transform: translateY(22px) } to { opacity: 1; transform: none } }
@@ -85,6 +99,7 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
     <p class="msg rise d2" id="msg"></p>
   </section>
   <section class="list rise d3" aria-label="Services" id="list"></section>
+  <section class="extra" id="extra" hidden aria-label=""><div class="pages" id="pages"></div><div class="dots" id="dots"></div><a class="link" id="link" target="_blank" rel="noopener" hidden></a></section>
   <section class="note" id="notice" hidden><b id="nT"></b><span id="nM" style="color: var(--sub)"></span></section>
   <footer class="foot"><span id="upd"></span><span><span id="help"></span> <a href="mailto:maintenance@muzzlimin.com">maintenance@muzzlimin.com</a></span><span style="color: var(--mute)">© 2026 Muzzlimin</span></footer>
 </main>
@@ -95,12 +110,12 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
       now: 'Maintenance en cours', nowT: 'Petite pause de maintenance', soon: 'Maintenance prévue', soonT: 'Une maintenance est prévue', block: 'App indisponible', blockT: 'Muzzlimin revient très vite',
       until: 'fin prévue vers', at: 'le', from: 'à partir de', svc: [['learn', 'Leçons, révision, Coran'], ['sync', 'Synchronisation'], ['buy', 'Achats et abonnements'], ['sign', 'Connexion et comptes']],
       up: 'Disponible', paused: 'En pause', down: 'Indisponible', offline: 'Hors ligne aussi', checked: 'Vérifié à', unknown: 'État inconnu', unknownT: 'Impossible de lire l’état', unknownM: 'Réessaie dans un instant.', help: 'Une question ?',
-      def: 'Tout ce qui est déjà sur ton téléphone reste disponible.' },
+      def: 'Tout ce qui est déjà sur ton téléphone reste disponible.', pages: 'Pages', page: 'Page' },
     en: { kick: 'Service status', other: 'Français', ok: 'All systems normal', okT: 'Muzzlimin is working normally', okM: 'Lessons, reviews, the Quran, sync and purchases all work.',
       now: 'Maintenance in progress', nowT: 'A short maintenance break', soon: 'Maintenance scheduled', soonT: 'Maintenance is scheduled', block: 'App unavailable', blockT: 'Muzzlimin will be right back',
       until: 'expected to end around', at: 'on', from: 'from', svc: [['learn', 'Lessons, reviews, Quran'], ['sync', 'Sync'], ['buy', 'Purchases and subscriptions'], ['sign', 'Sign-in and accounts']],
       up: 'Available', paused: 'Paused', down: 'Unavailable', offline: 'Works offline too', checked: 'Checked at', unknown: 'Status unknown', unknownT: 'We couldn’t read the status', unknownM: 'Try again in a moment.', help: 'A question?',
-      def: 'Everything already on your phone stays available.' } };
+      def: 'Everything already on your phone stays available.', pages: 'Pages', page: 'Page' } };
   let lang = (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : 'en';
   try { const q = new URLSearchParams(location.search).get('lang'); if (q === 'fr' || q === 'en') lang = q } catch {}
   let data = null, failed = false;
@@ -120,6 +135,31 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
     if (!m.active || (m.until && new Date(m.until) <= now)) return 'ok';
     if (m.from && new Date(m.from) > now) return 'soon';
     return m.blocking ? 'block' : 'now';
+  }
+  // Lien et pages (mêmes règles que l'app, regles-metier §28) : https seulement ;
+  // libellé de 32 caractères au plus ; 6 pages au plus ; images seulement sur
+  // status.muzzlimin.com, en PNG, JPEG ou WebP ; image en échec : page en texte seul.
+  const httpsUrl = v => { try { const u = new URL(String(v)); return u.protocol === 'https:' && u.hostname ? u.href : '' } catch { return '' } };
+  const imgUrl = v => { const u = httpsUrl(v); return u && new URL(u).hostname === 'status.muzzlimin.com' && /\.(png|jpe?g|webp)$/i.test(new URL(u).pathname) ? u : '' };
+  function extras(o) {
+    const box = $('extra'), pages = $('pages'), dots = $('dots'), link = $('link');
+    const list = (o && Array.isArray(o.pages) ? o.pages : []).filter(p => p && typeof p === 'object').slice(0, 6)
+      .map(p => ({ img: imgUrl(p.image), t: pick(p.title), m: pick(p.message) })).filter(p => p.t || p.m);
+    const label = o && o.link && typeof o.link === 'object' ? pick(o.link.label) : '';
+    const url = o && o.link && typeof o.link === 'object' ? httpsUrl(o.link.url) : '';
+    const hasLink = label && label.length <= 32 && url;
+    box.hidden = !list.length && !hasLink; box.setAttribute('aria-label', T[lang].pages);
+    pages.innerHTML = ''; dots.innerHTML = '';
+    list.forEach((p, i) => {
+      const c = document.createElement('article'); c.className = 'page';
+      if (p.img) { const im = document.createElement('img'); im.src = p.img; im.alt = ''; im.loading = 'lazy'; im.onerror = () => im.remove(); c.append(im) }
+      if (p.t) { const b = document.createElement('b'); b.textContent = p.t; c.append(b) }
+      if (p.m) { const sp = document.createElement('span'); sp.textContent = p.m; c.append(sp) }
+      pages.append(c);
+      if (list.length > 1) { const d = document.createElement('button'); d.type = 'button'; d.innerHTML = '<i></i>'; d.setAttribute('aria-label', T[lang].page + ' ' + (i + 1) + ' / ' + list.length); d.setAttribute('aria-current', String(i === 0)); d.onclick = () => c.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest', inline: 'center' }); dots.append(d) }
+    });
+    pages.onscroll = () => { const i = Math.round(pages.scrollLeft / Math.max(1, pages.clientWidth)); [...dots.children].forEach((d, k) => d.setAttribute('aria-current', String(k === Math.abs(i)))) };
+    link.hidden = !hasLink; if (hasLink) { link.href = url; link.textContent = label + ' ↗' }
   }
   function render() {
     const L = T[lang]; document.documentElement.lang = lang; $('kick').textContent = L.kick;
@@ -142,7 +182,11 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
     $('list').innerHTML = '';
     for (const [k, name] of L.svc) { const [col, t] = status(k); const r = document.createElement('div'); r.className = 'row'; const a = document.createElement('span'); a.textContent = name; const b = document.createElement('span'); b.className = 's'; b.style.color = col; b.innerHTML = '<span class="dot"></span>'; b.append(t); r.append(a, b); $('list').append(r) }
     const n = data && data.notice; const live = n && (!n.until || new Date(n.until) > Date.now()) && (pick(n.title) || pick(n.message));
+    const nPages = n && Array.isArray(n.pages) && n.pages.length;
     $('notice').hidden = !live; if (live) { $('nT').textContent = pick(n.title); $('nM').textContent = pick(n.message) }
+    // Pages et lien : ceux de la maintenance en cours ou prévue, sinon ceux de l'annonce.
+    const noticeOn = n && (!n.until || new Date(n.until) > Date.now()) && (live || nPages);
+    extras(s === 'now' || s === 'soon' || s === 'block' ? m : noticeOn ? n : null);
     $('upd').textContent = L.checked + ' ' + fmt(new Date().toISOString());
     $('help').textContent = L.help;
   }
