@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated_at": "2026-11-18T00:48:32Z",
+  "updated_at": "2026-11-18T15:33:39Z",
   "maintenance": {
     "active": false,
     "blocking": false
@@ -12,53 +12,5 @@
   "recommended_version": {
     "ios": "1.0.0",
     "android": "1.0.0"
-  },
-  "notice": {
-    "id": "2026-11-18-nouveau-bloc",
-    "until": "2026-11-19T00:48:00Z",
-    "title": {
-      "fr": "Nouveau bloc",
-      "en": "New block",
-      "ar": "وحدة جديدة",
-      "es": "Bloque nuevo",
-      "tr": "Yeni bölüm",
-      "id": "Blok baru",
-      "de": "Neuer Block"
-    },
-    "message": {
-      "fr": "Un nouveau bloc est disponible dans l’onglet Cours.",
-      "en": "A new block is available in the Courses tab.",
-      "ar": "وحدة جديدة متاحة في تبويب الدروس.",
-      "es": "Hay un bloque nuevo disponible en la pestaña Cursos.",
-      "tr": "Kurslar sekmesinde yeni bir bölüm var.",
-      "id": "Blok baru tersedia di tab Kursus.",
-      "de": "Ein neuer Block ist im Tab Kurse verfügbar."
-    },
-    "link": {
-      "label": {
-        "fr": "Incroyable"
-      },
-      "url": "https://www.muzzlimin.com"
-    },
-    "pages": [
-      {
-        "image": "https://status.muzzlimin.com/img/a1f5feea0e512e9a.webp",
-        "title": {
-          "fr": "Film Bloc 2"
-        },
-        "message": {
-          "fr": "Des nouveautés a explorer"
-        }
-      },
-      {
-        "image": "https://status.muzzlimin.com/img/b199b4e025ec02bd.png",
-        "title": {
-          "fr": "Film Bloc 3"
-        },
-        "message": {
-          "fr": "Plus de répit sur les doses"
-        }
-      }
-    ]
   }
 }
