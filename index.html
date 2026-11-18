@@ -61,18 +61,26 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
 .foot { margin-top: 30px; padding-top: 26px; border-top: 1px solid var(--line); color: var(--sub); font-size: 14px; display: grid; gap: 8px }
 .foot a { color: var(--red-text); font-weight: 600 }
 /* Bouton de lien et pages en carrousel (décision du 17/11/2026, règles de l'app §28). */
-.extra { display: grid; gap: 14px }
-.pages { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 2px }
+/* Même carte que la fenêtre de l'app (maquette Statut-carrousel, 18/11) : surtitre rouge, pages
+   qui glissent, flèches et points, bouton de lien sur toute la largeur. */
+.extra { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: 32px; padding: 24px 24px 22px; max-width: 460px; width: 100%; margin: 0 auto; box-sizing: border-box }
+.xkick { height: 44px; display: flex; align-items: center; font-size: 11.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red-text) }
+.pages { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none }
 .pages::-webkit-scrollbar { display: none }
-.page { flex: 0 0 100%; scroll-snap-align: center; background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 16px; display: grid; gap: 8px; text-align: center }
-.page img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 16px; display: block }
-.page b { font: 500 22px/1.2 var(--display) }
-.page span { color: var(--sub) }
+.page { flex: 0 0 100%; scroll-snap-align: center; display: flex; flex-direction: column; align-items: center; text-align: center }
+.page img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 20px; display: block; margin-bottom: 16px }
+.page b { font: 500 25px/1.2 var(--display); text-wrap: balance }
+.page span { color: var(--sub); font-size: 15px; line-height: 1.5; margin-top: 8px; min-height: 68px; text-wrap: pretty }
+.xnav { margin-top: 14px; display: flex; align-items: center; justify-content: center }
+.xnav .arr { width: 44px; height: 44px; border: 0; background: transparent; color: var(--sub); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0 }
+.xnav .arr:disabled { opacity: .3; cursor: default }
 .dots { display: flex; justify-content: center }
-.dots button { width: 34px; height: 44px; border: 0; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center }
+.dots button { width: 30px; height: 44px; border: 0; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0 }
 .dots button i { width: 8px; height: 8px; border-radius: 4px; background: var(--line2); transition: width .25s, background .25s }
 .dots button[aria-current=true] i { width: 22px; background: var(--acc) }
-.link { justify-self: center; display: inline-flex; align-items: center; gap: 8px; min-height: 50px; padding: 0 22px; border-radius: 25px; border: 1.5px solid var(--line2); color: var(--ink); text-decoration: none; font-weight: 700 }
+.link { margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; padding: 0 22px; border-radius: 25px; border: 1.5px solid var(--line2); color: var(--ink); text-decoration: none; font-size: 15.5px; font-weight: 600; box-sizing: border-box }
+.link svg { color: var(--sub); flex: none }
+.xgap { height: 14px }
 .link:hover { border-color: var(--acc) }
 .rise { animation: rs .8s var(--ease) both }
 .d1 { animation-delay: .08s } .d2 { animation-delay: .16s } .d3 { animation-delay: .24s }
@@ -99,7 +107,7 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
     <p class="msg rise d2" id="msg"></p>
   </section>
   <section class="list rise d3" aria-label="Services" id="list"></section>
-  <section class="extra" id="extra" hidden aria-label=""><div class="pages" id="pages"></div><div class="dots" id="dots"></div><a class="link" id="link" target="_blank" rel="noopener" hidden></a></section>
+  <section class="extra" id="extra" hidden aria-label=""><div class="xkick" id="xkick"></div><div class="pages" id="pages"></div><div class="xnav" id="xnav"><button type="button" class="arr" id="xprev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button><div class="dots" id="dots"></div><button type="button" class="arr" id="xnext"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><div class="xgap" id="xgap"></div><a class="link" id="link" target="_blank" rel="noopener" hidden></a></section>
   <section class="note" id="notice" hidden><b id="nT"></b><span id="nM" style="color: var(--sub)"></span></section>
   <footer class="foot"><span id="upd"></span><span><span id="help"></span> <a href="mailto:maintenance@muzzlimin.com">maintenance@muzzlimin.com</a></span><span style="color: var(--mute)">© 2026 Muzzlimin</span></footer>
 </main>
@@ -110,12 +118,12 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
       now: 'Maintenance en cours', nowT: 'Petite pause de maintenance', soon: 'Maintenance prévue', soonT: 'Une maintenance est prévue', block: 'App indisponible', blockT: 'Muzzlimin revient très vite',
       until: 'fin prévue vers', at: 'le', from: 'à partir de', svc: [['learn', 'Leçons, révision, Coran'], ['sync', 'Synchronisation'], ['buy', 'Achats et abonnements'], ['sign', 'Connexion et comptes']],
       up: 'Disponible', paused: 'En pause', down: 'Indisponible', offline: 'Hors ligne aussi', checked: 'Vérifié à', unknown: 'État inconnu', unknownT: 'Impossible de lire l’état', unknownM: 'Réessaie dans un instant.', help: 'Une question ?',
-      def: 'Tout ce qui est déjà sur ton téléphone reste disponible.', pages: 'Pages', page: 'Page' },
+      def: 'Tout ce qui est déjà sur ton téléphone reste disponible.', pages: 'Pages', page: 'Page', kM: 'Maintenance', kN: 'Quoi de neuf', prev: 'Page précédente', next: 'Page suivante' },
     en: { kick: 'Service status', other: 'Français', ok: 'All systems normal', okT: 'Muzzlimin is working normally', okM: 'Lessons, reviews, the Quran, sync and purchases all work.',
       now: 'Maintenance in progress', nowT: 'A short maintenance break', soon: 'Maintenance scheduled', soonT: 'Maintenance is scheduled', block: 'App unavailable', blockT: 'Muzzlimin will be right back',
       until: 'expected to end around', at: 'on', from: 'from', svc: [['learn', 'Lessons, reviews, Quran'], ['sync', 'Sync'], ['buy', 'Purchases and subscriptions'], ['sign', 'Sign-in and accounts']],
       up: 'Available', paused: 'Paused', down: 'Unavailable', offline: 'Works offline too', checked: 'Checked at', unknown: 'Status unknown', unknownT: 'We couldn’t read the status', unknownM: 'Try again in a moment.', help: 'A question?',
-      def: 'Everything already on your phone stays available.', pages: 'Pages', page: 'Page' } };
+      def: 'Everything already on your phone stays available.', pages: 'Pages', page: 'Page', kM: 'Maintenance', kN: 'What’s new', prev: 'Previous page', next: 'Next page' } };
   let lang = (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : 'en';
   try { const q = new URLSearchParams(location.search).get('lang'); if (q === 'fr' || q === 'en') lang = q } catch {}
   let data = null, failed = false;
@@ -141,8 +149,9 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
   // status.muzzlimin.com, en PNG, JPEG ou WebP ; image en échec : page en texte seul.
   const httpsUrl = v => { try { const u = new URL(String(v)); return u.protocol === 'https:' && u.hostname ? u.href : '' } catch { return '' } };
   const imgUrl = v => { const u = httpsUrl(v); return u && new URL(u).hostname === 'status.muzzlimin.com' && /\.(png|jpe?g|webp)$/i.test(new URL(u).pathname) ? u : '' };
-  function extras(o) {
+  function extras(o, kick) {
     const box = $('extra'), pages = $('pages'), dots = $('dots'), link = $('link');
+    $('xkick').textContent = kick || '';
     const list = (o && Array.isArray(o.pages) ? o.pages : []).filter(p => p && typeof p === 'object').slice(0, 6)
       .map(p => ({ img: imgUrl(p.image), t: pick(p.title), m: pick(p.message) })).filter(p => p.t || p.m);
     const label = o && o.link && typeof o.link === 'object' ? pick(o.link.label) : '';
@@ -158,8 +167,16 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
       pages.append(c);
       if (list.length > 1) { const d = document.createElement('button'); d.type = 'button'; d.innerHTML = '<i></i>'; d.setAttribute('aria-label', T[lang].page + ' ' + (i + 1) + ' / ' + list.length); d.setAttribute('aria-current', String(i === 0)); d.onclick = () => c.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest', inline: 'center' }); dots.append(d) }
     });
-    pages.onscroll = () => { const i = Math.round(pages.scrollLeft / Math.max(1, pages.clientWidth)); [...dots.children].forEach((d, k) => d.setAttribute('aria-current', String(k === Math.abs(i)))) };
-    link.hidden = !hasLink; if (hasLink) { link.href = url; link.textContent = label + ' ↗' }
+    const multi = list.length > 1, prev = $('xprev'), next = $('xnext');
+    $('xnav').hidden = !multi; $('xgap').hidden = multi; $('xkick').hidden = !list.length;
+    prev.setAttribute('aria-label', T[lang].prev); next.setAttribute('aria-label', T[lang].next);
+    const at = () => Math.abs(Math.round(pages.scrollLeft / Math.max(1, pages.clientWidth + 24)));
+    const go = i => { const c = pages.children[Math.max(0, Math.min(list.length - 1, i))]; if (c) c.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest', inline: 'center' }) };
+    const sync = () => { const i = at(); [...dots.children].forEach((d, k) => d.setAttribute('aria-current', String(k === i))); prev.disabled = i === 0; next.disabled = i >= list.length - 1 };
+    prev.onclick = () => go(at() - 1); next.onclick = () => go(at() + 1);
+    pages.onscroll = sync; sync();
+    link.hidden = !hasLink;
+    if (hasLink) { link.href = url; link.textContent = label; link.insertAdjacentHTML('beforeend', '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>') }
   }
   function render() {
     const L = T[lang]; document.documentElement.lang = lang; $('kick').textContent = L.kick;
@@ -186,7 +203,8 @@ h1 { font: 500 44px/1.04 var(--display); letter-spacing: -.035em; margin: 4px 0 
     $('notice').hidden = !live; if (live) { $('nT').textContent = pick(n.title); $('nM').textContent = pick(n.message) }
     // Pages et lien : ceux de la maintenance en cours ou prévue, sinon ceux de l'annonce.
     const noticeOn = n && (!n.until || new Date(n.until) > Date.now()) && (live || nPages);
-    extras(s === 'now' || s === 'soon' || s === 'block' ? m : noticeOn ? n : null);
+    const inMaint = s === 'now' || s === 'soon' || s === 'block';
+    extras(inMaint ? m : noticeOn ? n : null, inMaint ? L.kM : L.kN);
     $('upd').textContent = L.checked + ' ' + fmt(new Date().toISOString());
     $('help').textContent = L.help;
   }
