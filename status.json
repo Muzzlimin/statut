@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated_at": "2026-11-18T15:33:39Z",
+  "updated_at": "2026-11-18T18:54:49Z",
   "maintenance": {
     "active": false,
     "blocking": false
@@ -12,5 +12,53 @@
   "recommended_version": {
     "ios": "1.0.0",
     "android": "1.0.0"
+  },
+  "notice": {
+    "id": "2026-11-18-quoi-de-neuf",
+    "until": "2026-11-19T18:54:00Z",
+    "title": {
+      "fr": "Quoi de neuf",
+      "en": "What’s new",
+      "ar": "ما الجديد",
+      "es": "Novedades",
+      "tr": "Yenilikler",
+      "id": "Apa yang baru",
+      "de": "Neuigkeiten"
+    },
+    "message": {
+      "fr": "Muzzlimin s’améliore : découvre les nouveautés de cette version.",
+      "en": "Muzzlimin keeps getting better: discover what’s new in this version.",
+      "ar": "Muzzlimin يتحسّن باستمرار: اكتشف الجديد في هذا الإصدار.",
+      "es": "Muzzlimin sigue mejorando: descubre las novedades de esta versión.",
+      "tr": "Muzzlimin gelişmeye devam ediyor: bu sürümdeki yenilikleri keşfet.",
+      "id": "Muzzlimin terus berkembang: temukan hal baru di versi ini.",
+      "de": "Muzzlimin wird immer besser: Entdecke die Neuerungen dieser Version."
+    },
+    "link": {
+      "label": {
+        "fr": "Voir"
+      },
+      "url": "https://www.muzzlimin.com"
+    },
+    "pages": [
+      {
+        "image": "https://status.muzzlimin.com/img/b199b4e025ec02bd.png",
+        "title": {
+          "fr": "Nouvelles images"
+        },
+        "message": {
+          "fr": "Mieux comprendre ses textes\npas à pas et sans contraintes"
+        }
+      },
+      {
+        "image": "https://status.muzzlimin.com/img/a1f5feea0e512e9a.webp",
+        "title": {
+          "fr": "Nouveaux Jeux"
+        },
+        "message": {
+          "fr": "Cartes améliorés, conjugaisons, sprint ..."
+        }
+      }
+    ]
   }
 }
